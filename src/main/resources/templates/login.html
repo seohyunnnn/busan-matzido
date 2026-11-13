@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('로그인')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <div class="panel narrow">
+    <h1>로그인</h1>
+    <div class="flash err" th:if="${param.error != null}">아이디 또는 비밀번호가 올바르지 않거나 정지된 계정입니다.</div>
+    <form th:action="@{/login}" method="post">
+      <label class="field">아이디
+        <input type="text" name="username" autofocus required>
+      </label>
+      <label class="field">비밀번호
+        <input type="password" name="password" required>
+      </label>
+      <button class="btn" type="submit" style="width:100%">로그인</button>
+    </form>
+    <p class="muted" style="text-align:center">아직 회원이 아니신가요? <a th:href="@{/signup}">회원가입</a></p>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

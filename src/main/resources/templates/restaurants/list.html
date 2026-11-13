@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('맛집 목록')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <div class="detail-head">
+    <h1>부산 맛집 <span class="muted" style="font-size:1rem" th:text="'(' + ${page.totalElements} + '곳)'"></span></h1>
+    <a class="btn btn-accent" th:href="@{/restaurants/new}">+ 맛집 등록</a>
+  </div>
+
+  <form class="searchbar" th:action="@{/restaurants}" method="get">
+    <div><input type="text" name="keyword" th:value="${keyword}" placeholder="가게 이름, 메뉴, 주소"></div>
+    <div>
+      <select name="category">
+        <option value="">전체 분류</option>
+        <option th:each="c : ${@enums.categories()}" th:value="${c}" th:text="${c.label}"
+                th:selected="${category != null and category == c}"></option>
+      </select>
+    </div>
+    <div>
+      <select name="district">
+        <option value="">전체 지역</option>
+        <option th:each="d : ${@enums.districts()}" th:value="${d}" th:text="${d.label}"
+                th:selected="${district != null and district == d}"></option>
+      </select>
+    </div>
+    <div>
+      <select name="sort">
+        <option value="latest" th:selected="${sort == 'latest'}">최신순</option>
+        <option value="rating" th:selected="${sort == 'rating'}">평점순</option>
+        <option value="reviews" th:selected="${sort == 'reviews'}">리뷰 많은순</option>
+      </select>
+    </div>
+    <button class="btn" type="submit">검색</button>
+  </form>
+
+  <p class="center muted" th:if="${page.empty}">조건에 맞는 맛집이 없습니다.</p>
+
+  <div class="grid">
+    <th:block th:each="r : ${page.content}">
+      <a th:replace="~{fragments/layout :: restaurantCard(${r})}"></a>
+    </th:block>
+  </div>
+
+  <nav class="pagination" th:if="${page.totalPages > 1}">
+    <a th:if="${page.hasPrevious()}"
+       th:href="@{/restaurants(keyword=${keyword},category=${category},district=${district},sort=${sort},page=${page.number - 1})}">이전</a>
+    <a th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+       th:href="@{/restaurants(keyword=${keyword},category=${category},district=${district},sort=${sort},page=${i})}"
+       th:text="${i + 1}" th:classappend="${i == page.number} ? 'active'">1</a>
+    <a th:if="${page.hasNext()}"
+       th:href="@{/restaurants(keyword=${keyword},category=${category},district=${district},sort=${sort},page=${page.number + 1})}">다음</a>
+  </nav>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

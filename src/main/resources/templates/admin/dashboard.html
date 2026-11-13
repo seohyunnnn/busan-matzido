@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('관리자')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <h1>관리자 대시보드</h1>
+  <div class="stats">
+    <div class="stat"><div class="muted">전체 회원</div><div class="num" th:text="${memberCount}">0</div></div>
+    <div class="stat"><div class="muted">공개 맛집</div><div class="num" th:text="${approvedCount}">0</div></div>
+    <div class="stat"><div class="muted">승인 대기 맛집</div><div class="num" th:text="${pendingCount}">0</div></div>
+    <div class="stat"><div class="muted">전체 리뷰</div><div class="num" th:text="${reviewCount}">0</div></div>
+  </div>
+  <h2>바로가기</h2>
+  <div class="actions">
+    <a class="btn" th:href="@{/admin/restaurants(status='PENDING')}">맛집 승인 관리</a>
+    <a class="btn btn-ghost" th:href="@{/admin/members}">회원 관리</a>
+    <a class="btn btn-ghost" th:href="@{/admin/reviews}">리뷰 관리</a>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

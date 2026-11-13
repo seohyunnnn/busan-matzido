@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('맛집 관리')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <h1>맛집 관리</h1>
+  <div class="tabs">
+    <a th:each="s : ${statuses}" th:href="@{/admin/restaurants(status=${s})}" th:text="${s.label}"
+       th:classappend="${s == status} ? 'active'">상태</a>
+  </div>
+
+  <p class="muted" th:if="${page.empty}">해당 상태의 맛집이 없습니다.</p>
+  <div class="table-wrap" th:unless="${page.empty}">
+    <table class="list">
+      <thead><tr><th>가게</th><th>분류</th><th>지역</th><th>등록자</th><th>등록일</th><th>상태</th><th>관리</th></tr></thead>
+      <tbody>
+        <tr th:each="r : ${page.content}">
+          <td><a th:href="@{/restaurants/{id}(id=${r.id})}" th:text="${r.name}">이름</a></td>
+          <td th:text="${r.category.label}">분류</td>
+          <td th:text="${r.district.label}">구</td>
+          <td th:text="${r.author.nickname}">등록자</td>
+          <td th:text="${#temporals.format(r.createdAt, 'yyyy-MM-dd')}">날짜</td>
+          <td><span class="badge" th:classappend="${r.status.name()}" th:text="${r.status.label}">상태</span></td>
+          <td>
+            <div class="actions">
+              <form class="inline" th:if="${r.status.name() != 'APPROVED'}" method="post"
+                    th:action="@{/admin/restaurants/{id}/approve(id=${r.id},status=${status})}">
+                <button class="btn btn-ok btn-sm" type="submit">승인</button>
+              </form>
+              <form class="inline" th:if="${r.status.name() != 'REJECTED'}" method="post"
+                    th:action="@{/admin/restaurants/{id}/reject(id=${r.id},status=${status})}">
+                <button class="btn btn-ghost btn-sm" type="submit">반려</button>
+              </form>
+              <form class="inline" method="post" onsubmit="return confirm('삭제할까요? 리뷰도 함께 삭제됩니다.')"
+                    th:action="@{/admin/restaurants/{id}/delete(id=${r.id},status=${status})}">
+                <button class="btn btn-danger btn-sm" type="submit">삭제</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <nav class="pagination" th:if="${page.totalPages > 1}">
+    <a th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+       th:href="@{/admin/restaurants(status=${status},page=${i})}" th:text="${i + 1}"
+       th:classappend="${i == page.number} ? 'active'">1</a>
+  </nav>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

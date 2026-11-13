@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('마이페이지')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <h1>마이페이지</h1>
+  <div class="panel">
+    <table class="info-table">
+      <tr><th>아이디</th><td th:text="${loginMember.username}">id</td></tr>
+      <tr><th>닉네임</th><td th:text="${loginMember.nickname}">닉네임</td></tr>
+      <tr><th>이메일</th><td th:text="${loginMember.email}">email</td></tr>
+      <tr><th>가입일</th><td th:text="${#temporals.format(loginMember.createdAt, 'yyyy-MM-dd')}">날짜</td></tr>
+    </table>
+    <div class="actions" style="margin-top:14px">
+      <a class="btn btn-ghost btn-sm" th:href="@{/mypage/edit}">회원 정보 수정</a>
+    </div>
+  </div>
+
+  <h2>내가 등록한 맛집</h2>
+  <p class="muted" th:if="${#lists.isEmpty(myRestaurants)}">아직 등록한 맛집이 없습니다. <a th:href="@{/restaurants/new}">맛집 등록하기</a></p>
+  <div class="table-wrap" th:unless="${#lists.isEmpty(myRestaurants)}">
+    <table class="list">
+      <thead><tr><th>가게</th><th>분류</th><th>지역</th><th>상태</th><th>등록일</th></tr></thead>
+      <tbody>
+        <tr th:each="r : ${myRestaurants}">
+          <td><a th:href="@{/restaurants/{id}(id=${r.id})}" th:text="${r.name}">이름</a></td>
+          <td th:text="${r.category.label}">분류</td>
+          <td th:text="${r.district.label}">구</td>
+          <td><span class="badge" th:classappend="${r.status.name()}" th:text="${r.status.label}">상태</span></td>
+          <td th:text="${#temporals.format(r.createdAt, 'yyyy-MM-dd')}">날짜</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>내가 쓴 리뷰</h2>
+  <p class="muted" th:if="${#lists.isEmpty(reviews)}">작성한 리뷰가 없습니다.</p>
+  <ul class="reviews panel" th:unless="${#lists.isEmpty(reviews)}">
+    <li class="review" th:each="rv : ${reviews}">
+      <div class="review-head">
+        <a th:href="@{/restaurants/{id}(id=${rv.restaurant.id})}"><strong th:text="${rv.restaurant.name}">가게</strong></a>
+        <span class="stars" th:text="${rv.stars}">★★★★★</span>
+        <small class="muted" th:text="${#temporals.format(rv.createdAt, 'yyyy-MM-dd')}">날짜</small>
+      </div>
+      <p class="pre" th:text="${rv.content}">내용</p>
+    </li>
+  </ul>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

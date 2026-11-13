@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('홈')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+
+  <section class="hero">
+    <h1>부산에서 뭐 먹지?</h1>
+    <p>돼지국밥, 밀면, 회, 씨앗호떡까지 — 부산 사람들이 추천하는 맛집을 찾아보세요.</p>
+    <form th:action="@{/restaurants}" method="get">
+      <input type="text" name="keyword" placeholder="가게 이름, 메뉴, 지역으로 검색">
+      <button class="btn btn-accent" type="submit">검색</button>
+    </form>
+    <div class="chips">
+      <a class="chip" th:each="c : ${@enums.categories()}" th:href="@{/restaurants(category=${c})}" th:text="${c.label}">분류</a>
+    </div>
+  </section>
+
+  <h2>⭐ 평점 높은 맛집</h2>
+  <p class="muted" th:if="${#lists.isEmpty(topRated)}">아직 리뷰가 달린 맛집이 없어요. 첫 리뷰를 남겨 보세요!</p>
+  <div class="grid">
+    <th:block th:each="r : ${topRated}">
+      <a th:replace="~{fragments/layout :: restaurantCard(${r})}"></a>
+    </th:block>
+  </div>
+
+  <h2>🆕 새로 등록된 맛집</h2>
+  <p class="muted" th:if="${#lists.isEmpty(latest)}">등록된 맛집이 없습니다.</p>
+  <div class="grid">
+    <th:block th:each="r : ${latest}">
+      <a th:replace="~{fragments/layout :: restaurantCard(${r})}"></a>
+    </th:block>
+  </div>
+
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

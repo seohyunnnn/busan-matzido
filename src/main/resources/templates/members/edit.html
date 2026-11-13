@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('회원 정보 수정')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <div class="panel narrow">
+    <h1>회원 정보 수정</h1>
+    <form th:action="@{/mypage/edit}" method="post" th:object="${form}">
+      <label class="field">닉네임
+        <input type="text" th:field="*{nickname}">
+        <p class="field-error" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></p>
+      </label>
+      <p class="hint">비밀번호를 바꾸려면 아래를 입력하세요. 바꾸지 않으려면 비워 두세요.</p>
+      <label class="field">현재 비밀번호
+        <input type="password" th:field="*{currentPassword}" autocomplete="current-password">
+        <p class="field-error" th:if="${#fields.hasErrors('currentPassword')}" th:errors="*{currentPassword}"></p>
+      </label>
+      <label class="field">새 비밀번호
+        <input type="password" th:field="*{newPassword}" autocomplete="new-password">
+        <p class="field-error" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}"></p>
+      </label>
+      <label class="field">새 비밀번호 확인
+        <input type="password" th:field="*{newPasswordConfirm}" autocomplete="new-password">
+        <p class="field-error" th:if="${#fields.hasErrors('newPasswordConfirm')}" th:errors="*{newPasswordConfirm}"></p>
+      </label>
+      <div class="actions">
+        <button class="btn" type="submit">저장</button>
+        <a class="btn btn-ghost" th:href="@{/mypage}">취소</a>
+      </div>
+    </form>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('회원가입')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <div class="panel narrow">
+    <h1>회원가입</h1>
+    <form th:action="@{/signup}" method="post" th:object="${form}">
+      <label class="field">아이디 <span class="hint">(영문/숫자/_ 4~20자)</span>
+        <input type="text" th:field="*{username}" autocomplete="username">
+        <p class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+      </label>
+      <label class="field">비밀번호 <span class="hint">(8자 이상)</span>
+        <input type="password" th:field="*{password}" autocomplete="new-password">
+        <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+      </label>
+      <label class="field">비밀번호 확인
+        <input type="password" th:field="*{passwordConfirm}" autocomplete="new-password">
+        <p class="field-error" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></p>
+      </label>
+      <label class="field">닉네임 <span class="hint">(2~12자, 리뷰에 표시됩니다)</span>
+        <input type="text" th:field="*{nickname}">
+        <p class="field-error" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></p>
+      </label>
+      <label class="field">이메일
+        <input type="email" th:field="*{email}">
+        <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+      </label>
+      <button class="btn" type="submit" style="width:100%">가입하기</button>
+    </form>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

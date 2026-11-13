@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(pageTitle)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${pageTitle} + ' | 부산 맛지도'">부산 맛지도</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:fragment="header" class="site-header">
+  <div class="container nav">
+    <a class="logo" th:href="@{/}">🌊 부산 맛지도</a>
+    <nav class="menu">
+      <a th:href="@{/restaurants}">맛집 목록</a>
+      <a th:href="@{/map}">지도로 보기</a>
+      <a th:href="@{/restaurants/new}">맛집 등록</a>
+      <a th:if="${loginMember != null and loginMember.admin}" th:href="@{/admin}">관리자</a>
+    </nav>
+    <div class="auth">
+      <th:block th:if="${loginMember == null}">
+        <a th:href="@{/login}">로그인</a>
+        <a class="btn btn-sm" th:href="@{/signup}">회원가입</a>
+      </th:block>
+      <th:block th:if="${loginMember != null}">
+        <a th:href="@{/mypage}" th:text="${loginMember.nickname} + '님'">닉네임님</a>
+        <form class="inline" th:action="@{/logout}" method="post">
+          <button class="btn btn-sm btn-ghost" type="submit">로그아웃</button>
+        </form>
+      </th:block>
+    </div>
+  </div>
+  <div class="container" th:if="${flashMessage != null}">
+    <div class="flash ok" th:text="${flashMessage}">메시지</div>
+  </div>
+  <div class="container" th:if="${flashError != null}">
+    <div class="flash err" th:text="${flashError}">오류</div>
+  </div>
+</header>
+
+<!-- 맛집 카드: th:replace="~{fragments/layout :: restaurantCard(${r})}" -->
+<a th:fragment="restaurantCard(r)" class="card" th:href="@{/restaurants/{id}(id=${r.id})}">
+  <div class="card-img">
+    <img th:if="${r.imageUrl != null}" th:src="${r.imageUrl}" alt="" loading="lazy">
+    <span th:if="${r.imageUrl == null}">🍽️</span>
+  </div>
+  <div class="card-body">
+    <p class="card-title" th:text="${r.name}">가게 이름</p>
+    <div class="card-meta">
+      <span class="badge" th:text="${r.category.label}">분류</span>
+      <span th:text="${r.district.label}">구</span>
+      <span th:if="${r.representativeMenu != null}" th:text="'· ' + ${r.representativeMenu}"></span>
+    </div>
+    <div class="rating" style="margin-top:8px">
+      ★ <span th:text="${r.reviewCount > 0} ? ${#numbers.formatDecimal(r.averageRating, 1, 1)} : '-'">4.5</span>
+      <small>(리뷰 <span th:text="${r.reviewCount}">0</span>)</small>
+    </div>
+  </div>
+</a>
+
+<footer th:fragment="footer" class="site-footer">
+  <div class="container">부산 맛지도 · 부산의 맛집을 소개하고 리뷰를 나누는 개인 프로젝트</div>
+</footer>
+
+</body>
+</html>

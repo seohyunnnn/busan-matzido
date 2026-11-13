@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${formTitle})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <div class="panel form-wide">
+    <h1 th:text="${formTitle}">맛집 등록</h1>
+    <p class="hint" th:if="${loginMember != null and !loginMember.admin}">
+      등록(또는 수정)한 맛집은 관리자 승인 후 목록에 공개됩니다.
+    </p>
+
+    <form th:action="@{${formAction}}" method="post" th:object="${form}">
+      <label class="field">가게 이름 *
+        <input type="text" th:field="*{name}" maxlength="100">
+        <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+      </label>
+
+      <div class="row2">
+        <label class="field">분류 *
+          <select th:field="*{category}">
+            <option value="">선택하세요</option>
+            <option th:each="c : ${@enums.categories()}" th:value="${c}" th:text="${c.label}"></option>
+          </select>
+          <p class="field-error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
+        </label>
+        <label class="field">지역(구/군) *
+          <select th:field="*{district}">
+            <option value="">선택하세요</option>
+            <option th:each="d : ${@enums.districts()}" th:value="${d}" th:text="${d.label}"></option>
+          </select>
+          <p class="field-error" th:if="${#fields.hasErrors('district')}" th:errors="*{district}"></p>
+        </label>
+      </div>
+
+      <label class="field">주소 *
+        <input type="text" th:field="*{address}" maxlength="200" placeholder="예) 부산광역시 중구 자갈치해안로 52">
+        <p class="field-error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
+      </label>
+
+      <div class="row2">
+        <label class="field">전화번호
+          <input type="text" th:field="*{phone}" maxlength="30">
+          <p class="field-error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
+        </label>
+        <label class="field">영업시간
+          <input type="text" th:field="*{openingHours}" maxlength="100" placeholder="예) 매일 10:00~21:00">
+          <p class="field-error" th:if="${#fields.hasErrors('openingHours')}" th:errors="*{openingHours}"></p>
+        </label>
+      </div>
+
+      <label class="field">대표 메뉴
+        <input type="text" th:field="*{representativeMenu}" maxlength="200" placeholder="예) 돼지국밥, 수육">
+        <p class="field-error" th:if="${#fields.hasErrors('representativeMenu')}" th:errors="*{representativeMenu}"></p>
+      </label>
+
+      <label class="field">소개
+        <textarea th:field="*{description}" maxlength="2000"></textarea>
+        <p class="field-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+      </label>
+
+      <label class="field">대표 이미지 주소 <span class="hint">(선택, http(s):// 로 시작)</span>
+        <input type="text" th:field="*{imageUrl}" maxlength="500">
+        <p class="field-error" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></p>
+      </label>
+
+      <div class="row2">
+        <label class="field">위도 <span class="hint">(지도 표시용, 선택)</span>
+          <input type="number" step="any" th:field="*{latitude}">
+          <p class="field-error" th:if="${#fields.hasErrors('latitude')}" th:errors="*{latitude}"></p>
+        </label>
+        <label class="field">경도
+          <input type="number" step="any" th:field="*{longitude}">
+          <p class="field-error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{longitude}"></p>
+        </label>
+      </div>
+      <p th:if="${@mapProperties.enabled}">
+        <button type="button" id="geocode-btn" class="btn btn-ghost btn-sm">주소로 좌표 찾기</button>
+        <span id="geocode-msg" class="hint"></span>
+      </p>
+
+      <div class="actions">
+        <button class="btn" type="submit">저장</button>
+        <a class="btn btn-ghost" th:href="@{/restaurants}">취소</a>
+      </div>
+    </form>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<th:block th:if="${@mapProperties.enabled}">
+  <script th:src="|https://dapi.kakao.com/v2/maps/sdk.js?appkey=${@mapProperties.key}&amp;libraries=services&amp;autoload=false|"></script>
+</th:block>
+<script th:src="@{/js/restaurant-form.js}"></script>
+</body>
+</html>

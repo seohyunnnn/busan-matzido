@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('리뷰 관리')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <h1>리뷰 관리</h1>
+  <p class="muted" th:if="${page.empty}">작성된 리뷰가 없습니다.</p>
+  <div class="table-wrap" th:unless="${page.empty}">
+    <table class="list">
+      <thead><tr><th>맛집</th><th>작성자</th><th>별점</th><th>내용</th><th>작성일</th><th>관리</th></tr></thead>
+      <tbody>
+        <tr th:each="rv : ${page.content}">
+          <td><a th:href="@{/restaurants/{id}(id=${rv.restaurant.id})}" th:text="${rv.restaurant.name}">가게</a></td>
+          <td th:text="${rv.member.nickname}">닉네임</td>
+          <td class="stars" th:text="${rv.stars}">★★★★★</td>
+          <td class="pre" th:text="${#strings.abbreviate(rv.content, 80)}">내용</td>
+          <td th:text="${#temporals.format(rv.createdAt, 'yyyy-MM-dd')}">날짜</td>
+          <td>
+            <form class="inline" method="post" th:action="@{/admin/reviews/{id}/delete(id=${rv.id})}"
+                  onsubmit="return confirm('리뷰를 삭제할까요?')">
+              <button class="btn btn-danger btn-sm" type="submit">삭제</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <nav class="pagination" th:if="${page.totalPages > 1}">
+    <a th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+       th:href="@{/admin/reviews(page=${i})}" th:text="${i + 1}"
+       th:classappend="${i == page.number} ? 'active'">1</a>
+  </nav>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
