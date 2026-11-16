@@ -64,16 +64,6 @@
         <p class="field-error" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></p>
       </label>
 
-      <div class="row2">
-        <label class="field">위도 <span class="hint">(지도 표시용, 선택)</span>
-          <input type="number" step="any" th:field="*{latitude}">
-          <p class="field-error" th:if="${#fields.hasErrors('latitude')}" th:errors="*{latitude}"></p>
-        </label>
-        <label class="field">경도
-          <input type="number" step="any" th:field="*{longitude}">
-          <p class="field-error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{longitude}"></p>
-        </label>
-      </div>
       <p th:if="${@mapProperties.enabled}">
         <button type="button" id="geocode-btn" class="btn btn-ghost btn-sm">주소로 좌표 찾기</button>
         <span id="geocode-msg" class="hint"></span>
