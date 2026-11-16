@@ -41,7 +41,8 @@
 <!-- 맛집 카드: th:replace="~{fragments/layout :: restaurantCard(${r})}" -->
 <a th:fragment="restaurantCard(r)" class="card" th:href="@{/restaurants/{id}(id=${r.id})}">
   <div class="card-img">
-    <img th:if="${r.imageUrl != null}" th:src="${r.imageUrl}" alt="" loading="lazy">
+    <img th:if="${r.imageUrl != null}" th:src="${r.imageUrl}" alt="" loading="lazy"
+         onerror="this.replaceWith(document.createTextNode('🍽️'))">
     <span th:if="${r.imageUrl == null}">🍽️</span>
   </div>
   <div class="card-body">

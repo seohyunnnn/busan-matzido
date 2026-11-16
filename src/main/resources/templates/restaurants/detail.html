@@ -29,7 +29,8 @@
 
   <div class="detail-layout">
     <section>
-      <img class="detail-img" th:if="${restaurant.imageUrl != null}" th:src="${restaurant.imageUrl}" alt="">
+      <img class="detail-img" th:if="${restaurant.imageUrl != null}" th:src="${restaurant.imageUrl}" alt=""
+           onerror="this.style.display='none'">
       <div class="panel">
         <table class="info-table">
           <tr><th>주소</th><td th:text="${restaurant.address}">주소</td></tr>
