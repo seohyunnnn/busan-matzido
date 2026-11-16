@@ -34,7 +34,7 @@ public class RestaurantService {
             default -> Sort.by(Sort.Direction.DESC, "createdAt");
         };
         Pageable pageable = PageRequest.of(Math.max(page, 0), PAGE_SIZE, order);
-        String kw = keyword == null ? "" : keyword.trim();
+        String kw = keyword == null ? "" : escapeLike(keyword.trim());
         return restaurantRepository.search(RestaurantStatus.APPROVED, kw, category, district, pageable);
     }
 
@@ -139,5 +139,12 @@ public class RestaurantService {
     @Transactional
     public void reject(Long id) {
         restaurantRepository.findById(id).orElseThrow(NotFoundException::new).reject();
+    }
+
+    /** LIKE 검색에서 특별한 의미를 갖는 문자(%, _)를 일반 글자로 취급하게 바꿈 */
+    private static String escapeLike(String s) {
+        return s.replace("!", "!!")   // 이스케이프 문자 자신을 가장 먼저 처리
+                .replace("%", "!%")
+                .replace("_", "!_");
     }
 }

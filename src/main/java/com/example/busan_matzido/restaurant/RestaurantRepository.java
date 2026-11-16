@@ -18,9 +18,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
               and (:category is null or r.category = :category)
               and (:district is null or r.district = :district)
               and (:keyword = ''
-                   or r.name like concat('%', :keyword, '%')
-                   or r.representativeMenu like concat('%', :keyword, '%')
-                   or r.address like concat('%', :keyword, '%'))
+                  or r.name like concat('%', :keyword, '%') escape '!'
+                  or r.representativeMenu like concat('%', :keyword, '%') escape '!'
+                  or r.address like concat('%', :keyword, '%') escape '!')
             """)
     Page<Restaurant> search(@Param("status") RestaurantStatus status,
                             @Param("keyword") String keyword,
