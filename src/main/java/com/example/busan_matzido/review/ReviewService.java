@@ -55,6 +55,11 @@ public class ReviewService {
         if (reviewRepository.existsByRestaurant_IdAndMember_Id(restaurantId, member.getId())) {
             throw new BusinessException("이미 이 맛집에 리뷰를 작성하셨습니다. 기존 리뷰를 수정해 주세요.");
         }
+
+        if (restaurant.getAuthor().getId().equals(member.getId())) {
+            throw new BusinessException("본인이 등록한 맛집에는 리뷰를 작성할 수 없습니다.");
+        }
+
         Review review = reviewRepository.save(Review.builder()
                 .restaurant(restaurant)
                 .member(member)

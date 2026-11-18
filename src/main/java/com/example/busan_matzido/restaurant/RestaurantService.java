@@ -1,5 +1,6 @@
 package com.example.busan_matzido.restaurant;
 
+import com.example.busan_matzido.global.BusinessException;
 import com.example.busan_matzido.global.ForbiddenException;
 import com.example.busan_matzido.global.NotFoundException;
 import com.example.busan_matzido.member.Member;
