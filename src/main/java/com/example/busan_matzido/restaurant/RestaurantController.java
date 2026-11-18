@@ -1,5 +1,6 @@
 package com.example.busan_matzido.restaurant;
 
+import com.example.busan_matzido.global.BusinessException;
 import com.example.busan_matzido.member.Member;
 import com.example.busan_matzido.member.MemberService;
 import com.example.busan_matzido.review.Review;
@@ -103,8 +104,18 @@ public class RestaurantController {
             model.addAttribute("formAction", "/restaurants");
             return "restaurants/form";
         }
+
         Member member = memberService.getByUsername(principal.getName());
-        Restaurant saved = restaurantService.create(form, member);
+        Restaurant saved;
+        try {
+            saved = restaurantService.create(form, member);
+        } catch (BusinessException e) {
+            bindingResult.rejectValue("name", "duplicate", e.getMessage());
+            model.addAttribute("formTitle", "맛집 등록");
+            model.addAttribute("formAction", "/restaurants");
+            return "restaurants/form";
+        }
+
         ra.addFlashAttribute("flashMessage", member.isAdmin()
                 ? "맛집이 등록되었습니다."
                 : "맛집 등록을 신청했습니다. 관리자 승인 후 공개됩니다.");

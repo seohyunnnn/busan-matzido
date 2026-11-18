@@ -22,6 +22,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
                   or r.representativeMenu like concat('%', :keyword, '%') escape '!'
                   or r.address like concat('%', :keyword, '%') escape '!')
             """)
+
+    boolean existsByNameAndAddress(String name, String address);
+
     Page<Restaurant> search(@Param("status") RestaurantStatus status,
                             @Param("keyword") String keyword,
                             @Param("category") Category category,
