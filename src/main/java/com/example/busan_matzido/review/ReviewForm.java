@@ -12,6 +12,10 @@ import lombok.Setter;
 @Setter
 public class ReviewForm {
 
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
+    }
+
     @NotNull(message = "별점을 선택해 주세요.")
     @Min(value = 1, message = "별점은 1~5점입니다.")
     @Max(value = 5, message = "별점은 1~5점입니다.")

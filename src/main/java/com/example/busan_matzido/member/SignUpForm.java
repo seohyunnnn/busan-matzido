@@ -11,6 +11,10 @@ import lombok.Setter;
 @Setter
 public class SignUpForm {
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname == null ? null : nickname.trim();
+    }
+
     @NotBlank(message = "아이디를 입력해 주세요.")
     @Size(min = 4, max = 20, message = "아이디는 4~20자로 입력해 주세요.")
     @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "아이디는 영문, 숫자, 밑줄(_)만 사용할 수 있습니다.")
