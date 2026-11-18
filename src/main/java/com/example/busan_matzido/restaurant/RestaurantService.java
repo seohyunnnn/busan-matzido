@@ -90,7 +90,14 @@ public class RestaurantService {
 
     /** 관리자가 등록하면 바로 공개, 일반 회원은 승인 대기 */
     @Transactional
+
     public Restaurant create(RestaurantForm form, Member author) {
+
+        // RestaurantService.create() 맨 위에 추가
+        if (restaurantRepository.existsByNameAndAddress(form.getName().trim(), form.getAddress().trim())) {
+            throw new BusinessException("이미 등록된 맛집입니다.");
+        }
+
         Restaurant restaurant = Restaurant.builder()
                 .name(form.getName().trim())
                 .category(form.getCategory())
