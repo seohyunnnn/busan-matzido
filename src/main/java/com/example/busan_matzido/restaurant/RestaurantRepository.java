@@ -18,18 +18,18 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
               and (:category is null or r.category = :category)
               and (:district is null or r.district = :district)
               and (:keyword = ''
-                  or r.name like concat('%', :keyword, '%') escape '!'
-                  or r.representativeMenu like concat('%', :keyword, '%') escape '!'
-                  or r.address like concat('%', :keyword, '%') escape '!')
+                   or r.name like concat('%', :keyword, '%') escape '!'
+                   or r.representativeMenu like concat('%', :keyword, '%') escape '!'
+                   or r.address like concat('%', :keyword, '%') escape '!')
             """)
-
-    boolean existsByNameAndAddress(String name, String address);
-
     Page<Restaurant> search(@Param("status") RestaurantStatus status,
                             @Param("keyword") String keyword,
                             @Param("category") Category category,
                             @Param("district") District district,
                             Pageable pageable);
+
+    /** 같은 이름·주소의 맛집이 이미 있는지 (중복 등록 방지) */
+    boolean existsByNameAndAddress(String name, String address);
 
     List<Restaurant> findTop6ByStatusOrderByCreatedAtDesc(RestaurantStatus status);
 
