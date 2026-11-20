@@ -33,7 +33,8 @@ public class SignUpForm {
     private String nickname;
 
     @NotBlank(message = "이메일을 입력해 주세요.")
-    @Email(message = "올바른 이메일 형식이 아닙니다.")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)+$",
+            message = "올바른 이메일 형식이 아닙니다.")
     @Size(max = 100, message = "이메일은 100자 이하로 입력해 주세요.")
     private String email;
 }
