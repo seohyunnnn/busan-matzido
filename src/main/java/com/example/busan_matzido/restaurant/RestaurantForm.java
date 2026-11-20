@@ -27,7 +27,8 @@ public class RestaurantForm {
     @Size(max = 200, message = "주소는 200자 이하로 입력해 주세요.")
     private String address;
 
-    @Size(max = 30, message = "전화번호는 30자 이하로 입력해 주세요.")
+    @Pattern(regexp = "^$|^\\d{2,4}(-\\d{3,4})?-\\d{4}$",
+            message = "전화번호는 051-123-4567 형식으로 입력해 주세요.")
     private String phone;
 
     @Size(max = 100, message = "영업시간은 100자 이하로 입력해 주세요.")
