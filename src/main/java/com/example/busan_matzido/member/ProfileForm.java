@@ -17,7 +17,7 @@ public class ProfileForm {
     /** 비밀번호를 바꿀 때만 입력 */
     private String currentPassword;
 
-    @Pattern(regexp = "^$|^.{8,50}$", message = "새 비밀번호는 8~50자로 입력해 주세요.")
+    @Pattern(regexp = "^$|^(?=.*[A-Za-z])(?=.*\\d).{8,50}$", message = "새 비밀번호는 영문과 숫자를 포함해 8~50자로 입력해 주세요.")
     private String newPassword;
 
     private String newPasswordConfirm;
