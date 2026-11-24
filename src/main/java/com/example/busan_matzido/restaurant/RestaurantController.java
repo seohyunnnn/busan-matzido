@@ -147,7 +147,15 @@ public class RestaurantController {
             model.addAttribute("editingByMember", !member.isAdmin());
             return "restaurants/form";
         }
-        restaurantService.update(id, form, member);
+        try {
+            restaurantService.update(id, form, member);
+        } catch (BusinessException e) {
+            bindingResult.rejectValue("name", "duplicate", e.getMessage());
+            model.addAttribute("formTitle", "맛집 수정");
+            model.addAttribute("formAction", "/restaurants/" + id + "/edit");
+            model.addAttribute("editingByMember", !member.isAdmin());
+            return "restaurants/form";
+        }
         ra.addFlashAttribute("flashMessage", member.isAdmin()
                 ? "맛집 정보가 수정되었습니다."
                 : "수정되었습니다. 관리자 재승인 후 다시 공개됩니다.");

@@ -31,6 +31,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     /** 같은 이름·주소의 맛집이 이미 있는지 (중복 등록 방지) */
     boolean existsByNameAndAddress(String name, String address);
 
+    boolean existsByNameAndAddressAndIdNot(String name, String address, Long id);
+
     List<Restaurant> findTop6ByStatusOrderByCreatedAtDesc(RestaurantStatus status);
 
     List<Restaurant> findTop6ByStatusAndReviewCountGreaterThanOrderByAverageRatingDescReviewCountDesc(
