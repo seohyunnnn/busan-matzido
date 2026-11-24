@@ -94,7 +94,7 @@ public class RestaurantService {
 
     public Restaurant create(RestaurantForm form, Member author) {
 
-        // RestaurantService.create() 맨 위에 추가
+
         if (restaurantRepository.existsByNameAndAddress(form.getName().trim(), form.getAddress().trim())) {
             throw new BusinessException("이미 등록된 맛집입니다.");
         }
@@ -121,6 +121,10 @@ public class RestaurantService {
     @Transactional
     public Restaurant update(Long id, RestaurantForm form, Member editor) {
         Restaurant restaurant = getForEdit(id, editor);
+
+        if (restaurantRepository.existsByNameAndAddressAndIdNot(form.getName().trim(), form.getAddress().trim(), id)) {
+            throw new BusinessException("이미 등록된 맛집입니다.");
+        }
         restaurant.update(form.getName().trim(), form.getCategory(), form.getDistrict(), form.getAddress().trim(),
                 form.getPhone(), form.getOpeningHours(), form.getRepresentativeMenu(), form.getDescription(),
                 form.getImageUrl(), form.getLatitude(), form.getLongitude());
